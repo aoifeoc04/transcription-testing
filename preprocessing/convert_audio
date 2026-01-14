@@ -1,0 +1,18 @@
+# %% 
+import librosa
+import soundfile as sf
+from pathlib import Path
+
+INPUT_DIR = Path("data/raw")
+OUTPUT_DIR = Path("data/audio")
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+for audio_file in INPUT_DIR.glob("*"):
+    try:
+        audio, _ = librosa.load(audio_file, sr=16000, mono=True)
+        output_path = OUTPUT_DIR / audio_file.with_suffix(".wav").name
+        sf.write(output_path, audio, 16000)
+        print(f"Converted: {audio_file.name}")
+    except Exception as e:
+        print(f"Failed: {audio_file.name} ({e})")
+# %%
